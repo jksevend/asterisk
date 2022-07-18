@@ -40,7 +40,7 @@ public class UserStore implements UserManager {
     }
 
     @Override
-    @CachePut(value = USER_CACHE, key = "#user.id", condition = "#user.id != null")
+//    @CachePut(value = USER_CACHE, key = "#user.id", condition = "#user.id != null")
     public User save(final User user) {
         UserEntity userEntity = this.userMapper.toUserEntity(user);
         userEntity = this.userRepository.save(userEntity);

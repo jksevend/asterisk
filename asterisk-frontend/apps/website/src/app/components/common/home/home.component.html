@@ -5,28 +5,4 @@
   <a target="_blank" href="https://github.com/jksevend/asterisk">Github</a>
 </p>
 
-<p>{{message}}</p>
-
-<form style="width: 22rem;" (ngSubmit)="sendMessage()" [formGroup]="messageForm">
-  <h1>Send a message</h1>
-
-
-  <!-- message input -->
-  <div class="form-outline mb-4">
-    <input formControlName="message" type="text" id="password-input" class="form-control">
-    <label class="form-label" for="password-input" style="margin-left: 0px;">Password</label>
-    <div class="form-notch">
-      <div class="form-notch-leading" style="width: 9px;"></div>
-      <div class="form-notch-middle" style="width: 64px;"></div>
-      <div class="form-notch-trailing"></div>
-    </div>
-  </div>
-
-
-  <!-- Submit button -->
-  <button [disabled]="!messageForm.valid" type="submit" class="btn btn-primary btn-block mb-4">Send message</button>
-
-
-</form>
-
 
