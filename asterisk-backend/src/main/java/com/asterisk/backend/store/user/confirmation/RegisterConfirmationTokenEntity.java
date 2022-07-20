@@ -27,12 +27,6 @@ public class RegisterConfirmationTokenEntity extends Timestamp {
     @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    public RegisterConfirmationTokenEntity(final OffsetDateTime expiresAt, final String code, final UserEntity user) {
-        this.expiresAt = expiresAt;
-        this.code = code;
-        this.user = user;
-    }
-
     public RegisterConfirmationTokenEntity() {
 
     }

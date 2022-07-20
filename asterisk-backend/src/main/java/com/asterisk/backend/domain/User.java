@@ -1,5 +1,7 @@
 package com.asterisk.backend.domain;
 
+import com.asterisk.backend.infrastructure.UserRole;
+
 import java.util.UUID;
 
 public class User extends Timestamp {
@@ -10,6 +12,8 @@ public class User extends Timestamp {
     private String username;
     private String email;
     private String password;
+
+    private UserRole role;
     private boolean enabled;
 
     public User(final String firstName, final String lastName, final String username, final String email,
@@ -20,6 +24,7 @@ public class User extends Timestamp {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = UserRole.USER;
     }
 
     public User() {
@@ -79,5 +84,13 @@ public class User extends Timestamp {
 
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public UserRole getRole() {
+        return this.role;
+    }
+
+    public void setRole(final UserRole role) {
+        this.role = role;
     }
 }

@@ -23,12 +23,6 @@ public class ForgotPasswordTokenEntity extends Timestamp {
     @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    public ForgotPasswordTokenEntity(final OffsetDateTime expiresAt, final UserEntity user) {
-
-        this.expiresAt = expiresAt;
-        this.user = user;
-    }
-
     public ForgotPasswordTokenEntity() {
     }
 

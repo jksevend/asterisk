@@ -28,8 +28,16 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
+    /**
+     * Reads and returns a user resource
+     * Admins and User himself can read information
+     *
+     * @param userId corresponding user id
+     * @return OK with the user as body or 404
+     */
     @GetMapping(value = "/{userId}")
-    @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId)")
+    @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId) or hasRole(T(com.asterisk.backend" +
+            ".infrastructure.UserRole).ADMIN.getRoleName())")
     public ResponseEntity<?> readUser(@PathVariable final UUID userId) {
         final Optional<User> result = this.userService.readUser(userId);
 
@@ -40,7 +48,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/{userId}")
-    @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId)")
+    @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId) or hasRole(T(com.asterisk.backend" +
+            ".infrastructure.UserRole).ADMIN.getRoleName())")
     public ResponseEntity<?> updateUser(@PathVariable final UUID userId,
                                         @Valid @RequestBody final UserChangeRequestDto userChangeRequestDto) {
         final boolean result = this.userService.updateUser(userId, userChangeRequestDto);
@@ -51,7 +60,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/{userId}/change-password")
-    @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId)")
+    @PreAuthorize("@userSecurity.isAccountOwner(authentication, #userId) or hasRole(T(com.asterisk.backend" +
+            ".infrastructure.UserRole).ADMIN.getRoleName())")
     public ResponseEntity<?> changeUserPassword(@PathVariable final UUID userId,
                                                 @Valid @RequestBody final PasswordChangeRequestDto passwordChangeRequestDto) {
         final boolean result = this.userService.changePassword(userId, passwordChangeRequestDto);

@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import static com.asterisk.backend.adapter.UserControllerWebIT.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(
@@ -65,7 +66,7 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
     @MethodSource("loginBodyAndExpectedStatusCodes")
     public void testLoginUnsuccessful(final LoginRequestDto loginRequestDto, final int status) throws Exception {
         // WHEN
-        final MvcResult result = this.mvc.perform(post("/auth/login")
+        final MvcResult result = this.mvc.perform(post("/auth/login").with(csrf())
                         .content(this.objectMapper.writeValueAsString(loginRequestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -86,7 +87,7 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
         when(this.authenticationService.authenticate(loginRequestDto)).thenReturn(authentication);
 
         // WHEN
-        final MvcResult result = this.mvc.perform(post("/auth/login")
+        final MvcResult result = this.mvc.perform(post("/auth/login").with(csrf())
                         .content(this.objectMapper.writeValueAsString(loginRequestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -100,7 +101,7 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
     @WithFakeAsteriskUser(id = USER_ID)
     public void testLogoutSuccessful() throws Exception {
         // WHEN
-        final MvcResult result = this.mvc.perform(post("/auth/logout")).andReturn();
+        final MvcResult result = this.mvc.perform(post("/auth/logout").with(csrf())).andReturn();
 
         // THEN
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
@@ -109,7 +110,7 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
     @Test
     public void testLogoutUnauthorized() throws Exception {
         // WHEN
-        final MvcResult result = this.mvc.perform(post("/auth/logout")).andReturn();
+        final MvcResult result = this.mvc.perform(post("/auth/logout").with(csrf())).andReturn();
 
         // THEN
         assertThat(result.getResponse().getStatus()).isEqualTo(401);
