@@ -18,8 +18,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtHelper {
@@ -43,7 +45,9 @@ public class JwtHelper {
     public String generateAccessJwt(final Authentication authentication, final String fingerprintHash) {
         final UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         final Algorithm algorithm = Algorithm.HMAC256(this.jwtProperties.getAccessSecret());
-        final Map<String, ?> payload = Map.of("email", userPrincipal.getEmail(), "username", userPrincipal.getUsername());
+        final Map<String, ?> payload = Map.of("email", userPrincipal.getEmail(), "username",
+                userPrincipal.getUsername(), "roles",
+                List.of(userPrincipal.getAuthorities().stream().map(grantedAuthority -> grantedAuthority.getAuthority().split("_")[1]).collect(Collectors.joining())));
         return JWT.create()
                 .withPayload(payload)
                 .withClaim("fgp", fingerprintHash)
@@ -75,8 +79,7 @@ public class JwtHelper {
                     .build();
             try {
                 final DecodedJWT decodedJWT = verifier.verify(token);
-                final boolean tokenValid = decodedJWT.getExpiresAt().after(new Date());
-                return tokenValid;
+                return decodedJWT.getExpiresAt().after(new Date());
             } catch (final JWTVerificationException exception) {
                 return false;
             }

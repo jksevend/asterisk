@@ -2,6 +2,7 @@ package com.asterisk.backend.application.common;
 
 import com.asterisk.backend.domain.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -29,12 +30,12 @@ public class UserDetailsImpl implements UserDetails {
         this.email = email;
         this.password = password;
         this.enabled = enabled;
-        this.authorities = authorities;
+        this.authorities = Collections.unmodifiableCollection(authorities);
     }
 
     public static UserDetailsImpl of(final User user) {
         return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(),
-                user.getPassword(), user.isEnabled(), Collections.emptyList());
+                user.getPassword(), user.isEnabled(), List.of(new SimpleGrantedAuthority(user.getRole().getRoleName())));
     }
 
 

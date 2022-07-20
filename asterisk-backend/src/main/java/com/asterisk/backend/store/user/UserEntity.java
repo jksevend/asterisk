@@ -1,12 +1,10 @@
 package com.asterisk.backend.store.user;
 
+import com.asterisk.backend.infrastructure.UserRole;
 import com.asterisk.backend.store.Timestamp;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,18 +31,12 @@ public class UserEntity extends Timestamp {
     @Column(name = "password", length = 64, nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role;
+
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
-
-    public UserEntity(final String firstName, final String lastName, final String username, final String email,
-                      final String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.enabled = false;
-    }
 
     public UserEntity() {
 
@@ -103,6 +95,14 @@ public class UserEntity extends Timestamp {
 
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public UserRole getRole() {
+        return this.role;
+    }
+
+    public void setRole(final UserRole role) {
+        this.role = role;
     }
 
     @Override

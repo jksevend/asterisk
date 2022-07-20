@@ -3,6 +3,7 @@ package com.asterisk.backend._factory;
 import com.asterisk.backend.adapter.rest.authentication.model.RegisterRequestDto;
 import com.asterisk.backend.adapter.rest.user.model.UserResponseDto;
 import com.asterisk.backend.domain.User;
+import com.asterisk.backend.infrastructure.UserRole;
 import com.asterisk.backend.store.user.UserEntity;
 
 import java.time.OffsetDateTime;
@@ -16,6 +17,8 @@ public class UserTestFactory {
     private String username = "johndoe";
     private String email = "john@doe.com";
     private String password = "passwordpassword";
+
+    private UserRole role = UserRole.USER;
     private boolean enabled = true;
     private OffsetDateTime created = OffsetDateTime.now();
     private OffsetDateTime updated = OffsetDateTime.now();
@@ -28,6 +31,7 @@ public class UserTestFactory {
         user.setUsername(this.username);
         user.setEmail(this.email);
         user.setPassword(this.password);
+        user.setRole(this.role);
         user.setEnabled(this.enabled);
 
         return user;
@@ -41,6 +45,7 @@ public class UserTestFactory {
         user.setUsername(this.username);
         user.setEmail(this.email);
         user.setPassword(this.password);
+        user.setRole(this.role);
         user.setEnabled(this.enabled);
 
         return user;
@@ -87,6 +92,10 @@ public class UserTestFactory {
 
     public UserTestFactory setLastName(final String lastName) {
         this.lastName = lastName;
+        return this;
+    }
+    public UserTestFactory setUserRole(final UserRole role) {
+        this.role = role;
         return this;
     }
 }

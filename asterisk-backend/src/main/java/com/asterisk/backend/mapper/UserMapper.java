@@ -16,6 +16,7 @@ public class UserMapper {
         user.setUsername(userEntity.getUsername());
         user.setEmail(userEntity.getEmail());
         user.setPassword(userEntity.getPassword());
+        user.setRole(userEntity.getRole());
         user.setEnabled(userEntity.isEnabled());
         user.setCreatedAt(userEntity.getCreatedAt());
         user.setUpdatedAt(userEntity.getUpdatedAt());
@@ -31,6 +32,7 @@ public class UserMapper {
         userEntity.setUsername(user.getUsername());
         userEntity.setEmail(user.getEmail());
         userEntity.setPassword(user.getPassword());
+        userEntity.setRole(user.getRole());
         userEntity.setEnabled(user.isEnabled());
         userEntity.setCreatedAt(user.getCreatedAt());
         userEntity.setUpdatedAt(user.getUpdatedAt());
