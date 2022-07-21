@@ -1,6 +1,7 @@
 package com.asterisk.backend._factory;
 
 import com.asterisk.backend.adapter.rest.authentication.model.RegisterRequestDto;
+import com.asterisk.backend.adapter.rest.user.model.UserChangeRequestDto;
 import com.asterisk.backend.adapter.rest.user.model.UserResponseDto;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.infrastructure.UserRole;
@@ -58,6 +59,10 @@ public class UserTestFactory {
 
     public RegisterRequestDto newRegisterRequestDto() {
         return new RegisterRequestDto(this.firstName, this.lastName, this.email, this.username, this.password);
+    }
+
+    public UserChangeRequestDto newUserChangeRequestDto() {
+        return new UserChangeRequestDto(this.firstName, this.lastName, this.email, this.username);
     }
 
     public UserTestFactory setId(final UUID id) {

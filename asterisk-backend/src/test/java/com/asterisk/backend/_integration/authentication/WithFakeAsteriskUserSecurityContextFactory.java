@@ -22,7 +22,7 @@ public class WithFakeAsteriskUserSecurityContextFactory  implements WithSecurity
         final String password = "password";
 
         final UserDetailsImpl userDetails = new UserDetailsImpl(UUID.fromString(customUser.id()), "username", "email@email.com",
-                password, true, List.of(new SimpleGrantedAuthority(UserRole.USER.getRoleName())));
+                password, true, List.of(new SimpleGrantedAuthority(customUser.role().getRoleName())));
 
         final Authentication auth =
                 new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
