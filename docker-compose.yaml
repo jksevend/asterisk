@@ -1,4 +1,4 @@
-version: '2'
+version: '3.8'
 services:
 
   # Spring Boot backend service
@@ -25,14 +25,30 @@ services:
       - frontend
 
   # Angular website app service
-  frontend:
+  frontend-website:
     restart: always
-    image: 'asterisk-frontend'
+    image: 'asterisk-frontend-website'
     ports:
       - "80:80"
     build:
       context: asterisk-frontend/
-    container_name: frontend
+      target: website
+    container_name: frontend-website
+    depends_on:
+      - backend
+    networks:
+      - frontend
+
+  # Angular admin app service
+  frontend-admin:
+    restart: always
+    image: 'asterisk-frontend-admin'
+    ports:
+      - "81:81"
+    build:
+      context: asterisk-frontend/
+      target: admin
+    container_name: frontend-admin
     depends_on:
       - backend
     networks:
