@@ -14,7 +14,7 @@ services:
       - database
       - redis-cache
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/<YOUR-DATABASE>
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/<YOUR-DATABASE>
       - SPRING_DATASOURCE_USERNAME=<YOUR-DATABASE-USER>
       - SPRING_DATASOURCE_PASSWORD=<YOUR-DATABASE-PASSWORD>
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
