@@ -10,11 +10,11 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  # Label of the container job
+  container-job:
+    # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-    
-     # Service containers to run with `container-job`
+    # Service containers to run with `container-job`
     services:
       # Label used to access the service container
       postgres:
@@ -23,7 +23,8 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: postgres
-
+  build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
