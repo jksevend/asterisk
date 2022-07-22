@@ -1,4 +1,4 @@
-# Asterisk
+# ![Logo](./documentation/asterisk_logo.png) Asterisk
 
 A sample full stack web application and mobile app. Utilising Json Web Tokens (JWT) to authorized requests. Made with the (as I call it) SPARF stack. Which means
 **S**pring-Boot, **P**ostgresql, **A**ngular, **R**edis and **F**lutter.
