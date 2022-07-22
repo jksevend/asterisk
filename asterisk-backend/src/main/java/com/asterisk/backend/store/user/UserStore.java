@@ -31,7 +31,7 @@ public class UserStore implements UserManager {
     }
 
     @Override
-    public User findUserByEmail(final String email) throws UserNotFoundException{
+    public User findUserByEmail(final String email) throws UserNotFoundException {
         final Optional<UserEntity> userEntity = this.userRepository.findByEmail(email);
 
         if (userEntity.isEmpty()) throw new UserNotFoundException();
@@ -40,7 +40,7 @@ public class UserStore implements UserManager {
     }
 
     @Override
-//    @CachePut(value = USER_CACHE, key = "#user.id", condition = "#user.id != null")
+    @CachePut(value = USER_CACHE, key = "#user.id", condition = "#user.id != null")
     public User save(final User user) {
         UserEntity userEntity = this.userMapper.toUserEntity(user);
         userEntity = this.userRepository.save(userEntity);
