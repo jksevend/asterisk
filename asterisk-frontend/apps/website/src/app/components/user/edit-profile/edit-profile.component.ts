@@ -3,8 +3,8 @@ import {User} from "../../../models/user.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../../services/user.service";
 import {HttpResponse} from "@angular/common/http";
+import {AuthenticationService} from "../../../services/authentication.service";
 import {Router} from "@angular/router";
-import {AuthenticationService} from "@asterisk-frontend/authentication";
 
 @Component({
   selector: 'asterisk-frontend-edit-profile',

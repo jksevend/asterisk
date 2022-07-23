@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AuthenticationService} from "../../../services/authentication.service";
 import {HttpResponse} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
-import {AuthenticationService} from "@asterisk-frontend/authentication";
 
 @Component({
   selector: 'asterisk-frontend-forgot-password',

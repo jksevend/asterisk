@@ -8,7 +8,6 @@
     "start-admin": "nx run admin:serve:development",
     "start-website": "nx run website:serve:development",
     "build": "nx run-many --target=build --projects=website,admin --parallel=2",
-    "lint": "nx run-many --target=lint --projects=website,admin,asterisk-lib",
     "test": "nx test"
   },
   "private": true,

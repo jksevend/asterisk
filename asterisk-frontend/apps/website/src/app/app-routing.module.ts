@@ -1,6 +1,7 @@
 import {RouterModule, Routes} from "@angular/router";
 import {HomeComponent} from "./components/common/home/home.component";
 import {AboutComponent} from "./components/common/about/about.component";
+import {AuthenticationGuard} from "./guards/authentication.guard";
 import {LoginComponent} from "./components/authentication/login/login.component";
 import {RegisterComponent} from "./components/authentication/register/register.component";
 import {NgModule} from "@angular/core";
@@ -12,7 +13,6 @@ import {ForgotPasswordComponent} from "./components/authentication/forgot-passwo
 import {EditProfileComponent} from "./components/user/edit-profile/edit-profile.component";
 import {ChangePasswordComponent} from "./components/user/change-password/change-password.component";
 import {ErrorComponent} from "./components/common/error/error.component";
-import {AuthenticationGuard} from "@asterisk-frontend/authentication";
 
 const routes: Routes = [
   {path: '', component: HomeComponent},

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
+import {AuthenticationService} from "../../../services/authentication.service";
 import {HttpResponse} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
-import {AuthenticationService} from "@asterisk-frontend/authentication";
 
 @Component({
   selector: 'asterisk-frontend-navbar',

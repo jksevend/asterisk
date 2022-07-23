@@ -1,16 +1,16 @@
-import {Inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from "@angular/common/http";
-import {JwtHelperService} from "@auth0/angular-jwt";
 import {Observable} from "rxjs";
-import {BaseResponse} from "@asterisk-frontend/asterisk-common";
-import {CONFIG} from "@asterisk-frontend/config";
+import {BaseResponse} from "../models/base-response.model";
+import {environment} from "../../environments/environment";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  constructor(@Inject(CONFIG) private _appConfig: any, private readonly _http: HttpClient, private readonly _jwtHelper: JwtHelperService) {
+  constructor(private readonly _http: HttpClient, private readonly _jwtHelper: JwtHelperService) {
   }
 
   /**
@@ -19,7 +19,7 @@ export class AuthenticationService {
    * @param password
    */
   public login(email: string, password: string): Observable<HttpResponse<BaseResponse>> {
-    return this._http.post<BaseResponse>(this._appConfig.backendUrl + "/auth/login",
+    return this._http.post<BaseResponse>(environment.backendUrl + "/auth/login",
       {email: email, password: password}, {observe: 'response'});
   }
 
@@ -32,7 +32,7 @@ export class AuthenticationService {
    * @param password
    */
   public register(firstName: string, lastName: string, username: string, email: string, password: string): Observable<HttpResponse<BaseResponse>> {
-    return this._http.post<BaseResponse>(this._appConfig.backendUrl + "/auth/register",
+    return this._http.post<BaseResponse>(environment.backendUrl + "/auth/register",
       {
         firstName: firstName,
         lastName: lastName,
@@ -46,7 +46,7 @@ export class AuthenticationService {
    *
    */
   public logout(): Observable<HttpResponse<never>> {
-    return this._http.post<never>(this._appConfig.backendUrl + "/auth/logout",
+    return this._http.post<never>(environment.backendUrl + "/auth/logout",
       {},
       {observe: 'response'});
   }
@@ -57,7 +57,7 @@ export class AuthenticationService {
    * @param code
    */
   public confirmRegistration(cid: string, code: string): Observable<HttpResponse<BaseResponse>> {
-    return this._http.post<BaseResponse>(this._appConfig.backendUrl + `/auth/register/${cid}/confirm`,
+    return this._http.post<BaseResponse>(environment.backendUrl + `/auth/register/${cid}/confirm`,
       {code: code},
       {observe: 'response'});
   }
@@ -67,7 +67,7 @@ export class AuthenticationService {
    * @param cid
    */
   public resendConfirmationCode(cid: string): Observable<HttpResponse<BaseResponse>> {
-    return this._http.post<BaseResponse>(this._appConfig.backendUrl + `/auth/register/${cid}/resend-code`,
+    return this._http.post<BaseResponse>(environment.backendUrl + `/auth/register/${cid}/resend-code`,
       {},
       {observe: 'response'});
   }
@@ -77,7 +77,7 @@ export class AuthenticationService {
    * @param email
    */
   public forgotPassword(email: string): Observable<HttpResponse<never>> {
-    return this._http.post<never>(this._appConfig.backendUrl + '/auth/forgot-password',
+    return this._http.post<never>(environment.backendUrl + '/auth/forgot-password',
       {email: email}, {observe: 'response'})
   }
 
@@ -88,7 +88,7 @@ export class AuthenticationService {
    * @param passwordConfirmation
    */
   public resetPassword(fpid: string, password: string, passwordConfirmation: string): Observable<HttpResponse<never>> {
-    return this._http.post<never>(this._appConfig.backendUrl + `/auth/forgot-password/${fpid}/reset`,
+    return this._http.post<never>(environment.backendUrl + `/auth/forgot-password/${fpid}/reset`,
       {password: password, passwordConfirmation: passwordConfirmation},
       {observe: 'response'})
   }
@@ -113,4 +113,5 @@ export class AuthenticationService {
   public getSubject(): string {
     return this._jwtHelper.decodeToken().sub;
   }
+
 }

@@ -3,9 +3,6 @@
   "projects": {
     "admin": "apps/admin",
     "admin-e2e": "apps/admin-e2e",
-    "asterisk-common": "libs/asterisk-common",
-    "authentication": "libs/authentication",
-    "ui": "libs/ui",
     "website": "apps/website",
     "website-e2e": "apps/website-e2e"
   }
