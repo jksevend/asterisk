@@ -2,8 +2,10 @@ package com.asterisk.backend.adapter.rest.authentication;
 
 import com.asterisk.backend.adapter.rest.ResponseDto;
 import com.asterisk.backend.adapter.rest.authentication.model.*;
+import com.asterisk.backend.application.security.filter.FilterUtil;
 import com.asterisk.backend.application.security.jwt.JwtHelper;
 import com.asterisk.backend.service.AuthenticationService;
+import com.asterisk.backend.service.RevokedTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,11 +27,13 @@ import java.util.UUID;
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    private final RevokedTokenService revokedTokenService;
     private final JwtHelper jwtHelper;
 
     @Autowired
-    public AuthenticationController(final AuthenticationService authenticationService, final JwtHelper jwtHelper) {
+    public AuthenticationController(final AuthenticationService authenticationService, final RevokedTokenService revokedTokenService, final JwtHelper jwtHelper) {
         this.authenticationService = authenticationService;
+        this.revokedTokenService = revokedTokenService;
         this.jwtHelper = jwtHelper;
     }
 
@@ -60,7 +67,12 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<?> logout(final HttpServletRequest request) {
+        final String token = FilterUtil.parseBearer(request);
+        if (token == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        this.revokedTokenService.revokeToken(DatatypeConverter.printHexBinary(token.getBytes(StandardCharsets.UTF_8)));
+
         final ResponseCookie responseCookie = ResponseCookie
                 .from("fgp", "")
                 .secure(true)

@@ -3,15 +3,14 @@ package com.asterisk.backend.application.security.filter;
 import com.asterisk.backend.application.common.UserDetailsImpl;
 import com.asterisk.backend.application.common.UserDetailsServiceImpl;
 import com.asterisk.backend.application.security.jwt.JwtHelper;
+import com.asterisk.backend.service.RevokedTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,31 +18,39 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 @Component
 public class AccessTokenFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccessTokenFilter.class);
-    private static final String BEARER_PREFIX = "Bearer ";
 
     private final JwtHelper jwtHelper;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RevokedTokenService revokedTokenService;
 
     @Autowired
     public AccessTokenFilter(final JwtHelper jwtHelper,
-                           final UserDetailsServiceImpl userDetailsService) {
+                             final UserDetailsServiceImpl userDetailsService,
+                             final RevokedTokenService revokedTokenService) {
         this.jwtHelper = jwtHelper;
         this.userDetailsService = userDetailsService;
+        this.revokedTokenService = revokedTokenService;
     }
 
     @Override
     protected void doFilterInternal(@NonNull final HttpServletRequest request,
                                     @NonNull final HttpServletResponse response,
                                     @NonNull final FilterChain filterChain) throws ServletException, IOException {
-        final String accessJwt = this.parseBearer(request);
+        final String accessJwt = FilterUtil.parseBearer(request);
         final String fingerprintCookie = this.parseCookie(request);
         if (accessJwt != null && fingerprintCookie != null && this.jwtHelper.validateAccessJwt(accessJwt, fingerprintCookie)) {
+            if (this.revokedTokenService.isTokenRevoked(DatatypeConverter.printHexBinary(accessJwt.getBytes(StandardCharsets.UTF_8)))) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             final String email = this.jwtHelper.getEmailFromAccessJwt(accessJwt);
             final UserDetailsImpl principal = (UserDetailsImpl) this.userDetailsService.loadUserByUsername(email);
             LOGGER.info("Granted Access for Method {} | Path {} | User {} | Roles {}",
@@ -75,19 +82,5 @@ public class AccessTokenFilter extends OncePerRequestFilter {
         }
         return fgp.getValue();
 
-    }
-
-    /**
-     * Parses the access jwt from the authorization header
-     *
-     * @param request Incoming http request
-     * @return Value extracted from header or null if no token was found
-     */
-    private String parseBearer(final HttpServletRequest request) {
-        final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith(BEARER_PREFIX)) {
-            return authorizationHeader.substring(BEARER_PREFIX.length());
-        }
-        return null;
     }
 }

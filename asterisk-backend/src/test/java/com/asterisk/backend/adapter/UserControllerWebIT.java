@@ -15,6 +15,7 @@ import com.asterisk.backend.application.security.jwt.JwtHelper;
 import com.asterisk.backend.domain.User;
 import com.asterisk.backend.infrastructure.UserRole;
 import com.asterisk.backend.mapper.UserMapper;
+import com.asterisk.backend.service.RevokedTokenService;
 import com.asterisk.backend.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,9 @@ public class UserControllerWebIT extends WebIntegrationTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private RevokedTokenService revokedTokenService;
 
     @MockBean
     private UserDetailsServiceImpl userDetailsService;

@@ -10,6 +10,7 @@ import com.asterisk.backend.application.security.error.ForbiddenErrorHandler;
 import com.asterisk.backend.application.security.error.UnauthorizedErrorHandler;
 import com.asterisk.backend.application.security.jwt.JwtHelper;
 import com.asterisk.backend.service.AuthenticationService;
+import com.asterisk.backend.service.RevokedTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +33,7 @@ import java.util.stream.Stream;
 
 import static com.asterisk.backend.adapter.UserControllerWebIT.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,6 +47,9 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
 
     @MockBean
     private AuthenticationService authenticationService;
+
+    @MockBean
+    private RevokedTokenService revokedTokenService;
 
     @MockBean
     private UserDetailsServiceImpl userDetailsService;
@@ -100,8 +106,15 @@ public class AuthenticationControllerWebIT extends WebIntegrationTest {
     @Test
     @WithFakeAsteriskUser(id = USER_ID)
     public void testLogoutSuccessful() throws Exception {
+        // GIVEN
+        when(this.revokedTokenService.isTokenRevoked(anyString())).thenReturn(false);
+
         // WHEN
-        final MvcResult result = this.mvc.perform(post("/auth/logout").with(csrf())).andReturn();
+        final MvcResult result =
+                this.mvc.perform(post("/auth/logout")
+                        .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", "ABC"))
+                        .with(csrf()))
+                        .andReturn();
 
         // THEN
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
