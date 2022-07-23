@@ -32,4 +32,4 @@ This project is structured in the following way:
 
 ## Docker
 The whole stack is dockerized. Run ``docker compose up --build`` to execute the postgresql, redis, angular website, angular admin and spring boot backend containers.
-To verify everything is working visit http://localhost:8080/healthcheck (backend), http://localhost:80 (frontend-website) and http://localhost:81 (frontend-admin)
+To verify everything is working visit http://localhost:8080/healthcheck (backend) and http://localhost:80 (website).

@@ -19,16 +19,3 @@ ADD apps/website/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist/apps/website .
 
 EXPOSE 80
-
-# Setup nginx to serve the admin app
-FROM nginx:alpine as admin
-
-WORKDIR /usr/share/nginx/html
-
-RUN rm -rf ./*
-
-ADD apps/admin/nginx-default.conf /etc/nginx/conf.d/default.conf
-
-COPY --from=builder /app/dist/apps/admin .
-
-EXPOSE 80

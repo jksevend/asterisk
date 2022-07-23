@@ -32,23 +32,7 @@ services:
       - "80:80"
     build:
       context: asterisk-frontend/
-      target: website
     container_name: frontend-website
-    depends_on:
-      - backend
-    networks:
-      - frontend
-
-  # Angular admin app service
-  frontend-admin:
-    restart: always
-    image: 'asterisk-frontend-admin'
-    ports:
-      - "81:81"
-    build:
-      context: asterisk-frontend/
-      target: admin
-    container_name: frontend-admin
     depends_on:
       - backend
     networks:
