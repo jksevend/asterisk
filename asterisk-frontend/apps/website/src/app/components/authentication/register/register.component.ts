@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
-import {AuthenticationService} from "../../../services/authentication.service";
 import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {BaseResponse} from "../../../models/base-response.model";
+import {AuthenticationService} from "@asterisk-frontend/authentication";
+import {BaseResponse} from "@asterisk-frontend/asterisk-common";
 
 @Component({
   selector: 'asterisk-frontend-register',

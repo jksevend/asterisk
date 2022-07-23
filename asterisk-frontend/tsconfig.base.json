@@ -14,7 +14,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@asterisk-frontend/asterisk-common": [
+        "libs/asterisk-common/src/index.ts"
+      ],
+      "@asterisk-frontend/authentication": ["libs/authentication/src/index.ts"],
+      "@asterisk-frontend/ui": ["libs/ui/src/index.ts"],
+      "@asterisk-frontend/config": ["libs/config/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

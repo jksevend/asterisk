@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../../services/user.service";
 import {User} from "../../../models/user.model";
-import {AuthenticationService} from "../../../services/authentication.service";
 import {HttpResponse} from "@angular/common/http";
-import {NavigationExtras, Router} from "@angular/router";
+import {Router} from "@angular/router";
+import {AuthenticationService} from "@asterisk-frontend/authentication";
 
 @Component({
   selector: 'asterisk-frontend-profile',

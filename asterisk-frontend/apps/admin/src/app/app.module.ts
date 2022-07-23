@@ -1,17 +1,24 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
-import { RouterModule } from '@angular/router';
+import {AppComponent} from './app.component';
+import {CONFIG} from "@asterisk-frontend/config";
+import {AsteriskCommonModule} from "@asterisk-frontend/asterisk-common";
+import {environment} from "../environments/environment";
+import {AuthenticationModule} from "@asterisk-frontend/authentication";
+
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
+    AsteriskCommonModule,
+    AuthenticationModule
   ],
-  providers: [],
+  providers: [
+    {provide: CONFIG, useValue: environment}
+  ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

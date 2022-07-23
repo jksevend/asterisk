@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/common/home/home.component';
 import { AboutComponent } from './components/common/about/about.component';
@@ -17,15 +16,14 @@ import { EditProfileComponent } from './components/user/edit-profile/edit-profil
 import { ChangePasswordComponent } from './components/user/change-password/change-password.component';
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { AppRoutingModule } from './app-routing.module';
-import { JwtModule } from '@auth0/angular-jwt';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ErrorComponent } from './components/common/error/error.component';
-
-export function tokenGetter() {
-  return localStorage.getItem('_uid');
-}
+import {environment} from "../environments/environment";
+import {CONFIG} from "@asterisk-frontend/config";
+import {AuthenticationModule} from "@asterisk-frontend/authentication";
+import {AsteriskCommonModule} from "@asterisk-frontend/asterisk-common";
 
 @NgModule({
   declarations: [
@@ -49,16 +47,14 @@ export function tokenGetter() {
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     BrowserModule,
-    HttpClientModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter,
-      },
-    }),
+    AuthenticationModule,
+    AsteriskCommonModule,
     ReactiveFormsModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+    { provide: CONFIG, useValue: environment}
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

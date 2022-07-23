@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../../services/user.service";
-import {AuthenticationService} from "../../../services/authentication.service";
 import {HttpResponse} from "@angular/common/http";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
+import {AuthenticationService} from "@asterisk-frontend/authentication";
 
 @Component({
   selector: 'asterisk-frontend-change-password',
