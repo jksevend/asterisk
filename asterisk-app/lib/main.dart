@@ -1,4 +1,6 @@
+import 'package:asterisk_app/page/authentication/login_page.dart';
 import 'package:asterisk_app/page/main_page.dart';
+import 'package:asterisk_app/service/http/authentication_service.dart';
 import 'package:asterisk_app/style/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -54,11 +56,22 @@ class AsteriskApp extends StatelessWidget {
             themeMode: ThemeMode.system,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
-            home: const MainPage(),
+            home: FutureBuilder<bool>(
+              future: AuthenticationService.isJwtExpired(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final bool expired = snapshot.data ?? true;
+                  return expired ? const LoginPage() : const MainPage();
+                } else {
+                  return const Scaffold(
+                    body: Center(child: LinearProgressIndicator(),),
+                  );
+                }
+              },
+            ),
           );
         },
       ),
     );
   }
 }
-

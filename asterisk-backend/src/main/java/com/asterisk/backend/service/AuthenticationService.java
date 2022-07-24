@@ -77,7 +77,6 @@ public class AuthenticationService {
 
         // Re-Set to current authentication
         authentication = SecurityContextHolder.getContext().getAuthentication();
-        LOGGER.info("User {} successfully authenticated", email);
 
         return authentication;
     }

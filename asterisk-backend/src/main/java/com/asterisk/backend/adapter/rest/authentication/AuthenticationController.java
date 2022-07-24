@@ -2,10 +2,13 @@ package com.asterisk.backend.adapter.rest.authentication;
 
 import com.asterisk.backend.adapter.rest.ResponseDto;
 import com.asterisk.backend.adapter.rest.authentication.model.*;
+import com.asterisk.backend.application.common.UserDetailsImpl;
 import com.asterisk.backend.application.security.filter.FilterUtil;
 import com.asterisk.backend.application.security.jwt.JwtHelper;
 import com.asterisk.backend.service.AuthenticationService;
 import com.asterisk.backend.service.RevokedTokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
     private final AuthenticationService authenticationService;
     private final RevokedTokenService revokedTokenService;
     private final JwtHelper jwtHelper;
@@ -48,6 +52,7 @@ public class AuthenticationController {
     public ResponseEntity<ResponseDto> login(@Valid @RequestBody final LoginRequestDto loginRequestDto) {
         try {
             final Authentication authentication = this.authenticationService.authenticate(loginRequestDto);
+            final UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             // Fingerprints
             final String fingerprint = this.jwtHelper.generateFingerprint();
             final String hash = this.jwtHelper.generateFingerprintHash(fingerprint);
@@ -59,8 +64,10 @@ public class AuthenticationController {
             final HttpHeaders headers = new HttpHeaders();
             headers.add("Set-Cookie", cookie.toString());
             final ResponseDto responseDto = new ResponseDto("Login successful", accessJwt);
+            LOGGER.info("Successfully authenticated {}", userDetails.getId());
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(responseDto);
         } catch (final BadCredentialsException | UsernameNotFoundException e) {
+            LOGGER.info("Authentication request failed: {}", e.getMessage());
             final ResponseDto responseDto = new ResponseDto("Credentials dont match.", null);
             return ResponseEntity.badRequest().body(responseDto);
         }
